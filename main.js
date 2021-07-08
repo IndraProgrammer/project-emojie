@@ -13,10 +13,10 @@ function take_Snapshot(){
     Webcam.snap(function(data_uri){
         document.getElementById("Result").innerHTML='<img id="captured_image" src="'+data_uri+'"/>';
     }) ;
-    speak();
+    
 }
 console.log("ml5version",ml5.version);
-classify=ml5.imageClassifier("https://teachablemachine.withgoogle.com/models/XfmT6YDQW/model.json",modelLoaded);
+classify=ml5.imageClassifier("https://teachablemachine.withgoogle.com/models/-RXlvP5Sa/model.json",modelLoaded);
 function modelLoaded(){
     console.log(modelLoaded);
 }
@@ -27,3 +27,40 @@ function speak(){
     var utterthis=new SpeechSynthesisUtterance(speakdata1+speakdata2);
     synth.speak(utterthis);
 }
+function check(){
+    img=document.getElementById("captured_image");
+    classify.classify(img,gotResult);
+}
+function gotResult(error,Results){
+    if(error){
+        console.log(error);
+    }
+    else{
+        console.log(Results);
+        document.getElementById("Result_Emotion_Name1").innerHTML=Results[0].label;
+        document.getElementById("Result_Emotion_Name2").innerHTML=Results[1].label;
+        prediction_1=Results[0].label;
+        prediction_2=Results[1].label;
+        speak();
+        if(Results[0].label=="Best"){
+            document.getElementById("Update_Emoji_1").innerHTML="&#128077;";
+        }
+        if(Results[0].label=="Amazing"){
+            document.getElementById("Update_Emoji_1").innerHTML="&#128076;";
+        }
+        if(Results[0].label=="Victory"){
+            document.getElementById("Update_Emoji_1").innerHTML="&#9996;";
+        }
+        }
+        if(Results[1].label=="Best"){
+            document.getElementById("Update_Emoji_2").innerHTML="&#128077;";
+        }
+        if(Results[1].label=="Amazing"){
+            document.getElementById("Update_Emoji_2").innerHTML="&#128076;";
+        }
+        if(Results[1].label=="Victory"){
+            document.getElementById("Update_Emoji_2").innerHTML="&#9996;";
+        }
+        
+        }
+    
